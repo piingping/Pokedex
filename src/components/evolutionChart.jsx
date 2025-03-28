@@ -1,10 +1,23 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
+import './evolutionChart.css'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faArrowDown, faArrowRight } from "@fortawesome/free-solid-svg-icons";
+
 
 
 export default function EvolutionChart({ name }) {
   const [chainList, setChainList] = useState([])
   const [imageMap, setImageMap] = useState({})
+
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 840);
+
+useEffect(() => {
+  const handleResize = () => setIsMobile(window.innerWidth <= 840);
+  window.addEventListener("resize", handleResize);
+  return () => window.removeEventListener("resize", handleResize);
+}, []);
+
 
   useEffect(() => {
     async function fetchEvolutionChain(name) {
@@ -45,24 +58,27 @@ export default function EvolutionChart({ name }) {
   }
 
   return (
-    <div className="mt-6">
-      <h2 className="text-xl font-bold mb-2">Evolution Chain</h2>
-      <div className="flex items-center flex-wrap gap-4">
-      {chainList.map((pokemonName, i) => (
-        <div key={pokemonName} className="flex items-center gap-2">
-            <Link to={`/pokemon/${pokemonName}`} className="text-center hover:scale-105 transition">
-            <img
-                src={imageMap[pokemonName]}
-                alt={pokemonName}
-                className="w-20 h-20 mx-auto"
-            />
-            <p className="capitalize mt-1 text-white">{pokemonName}</p>
-            </Link>
-            {i !== chainList.length - 1 && <span className="text-2xl">➡️</span>}
-        </div>
-        ))}
+    <div className="evo-parent">
+      <h2 className="evo-title">Evolution Chain</h2>
+<div className="evo-container">
+{chainList.map((pokemonName, i) => (
+  <div key={pokemonName} className="evo-item">
+    <Link to={`/pokemon/${pokemonName}`} className="evo-link">
+      <img src={imageMap[pokemonName]} alt={pokemonName} className="evo-image" />
+      <p className="evo-name">{pokemonName}</p>
+    </Link>
+    {i !== chainList.length - 1 && (
+           <FontAwesomeIcon
+           icon={isMobile ? faArrowDown : faArrowRight}
+           className="arrow-icon"
+         />
+         
+    )}
+  </div>
+))}
 
-      </div>
+</div>
+
     </div>
   )
 }

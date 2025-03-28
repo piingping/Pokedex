@@ -11,14 +11,14 @@
   .statbar-value {
     font-size: 12px;
     font-weight: bold;
-    color: #000; /* เปลี่ยนได้ตามสีพื้นหลัง */
+    color: #000;
     padding-left: 8px;
   }
   
   .statbar-bar {
     height: 15px;
     width: 100%;
-    background-color: #1e293b; /* gray-800 */
+    background-color: #1e293b;
     border-radius: 50px;
     overflow: hidden;
     /* border: 3px solid rgba(245, 245, 245, 0.3); */

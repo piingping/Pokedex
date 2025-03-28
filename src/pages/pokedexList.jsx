@@ -5,7 +5,7 @@ import PokemonCard from "../components/pokemonCard";
 export default function Pokedex() {
   const [allPokemonList, setAllPokemonList] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
-  const [limit, setLimit] = useState(20);
+  const [limit, setLimit] = useState(24);
 
   useEffect(() => {
     fetch(`https://pokeapi.co/api/v2/pokemon?limit=1300`)
@@ -23,7 +23,7 @@ export default function Pokedex() {
   const filteredList = allPokemonList.filter((pokemon) => {
     const trimmed = searchTerm.trim();
 
-    // ถ้าเป็นตัวเลขล้วน
+    // ถ้าเป็นตัวเลข
     if (/^\d+$/.test(trimmed)) {
       return Number(pokemon.id) === Number(trimmed);
     }
@@ -71,7 +71,7 @@ useEffect(() => {
   const visibleList = (searchTerm
     ? filteredList
     : allPokemonList.slice(0, limit)
-  ).filter(p => !!p && !!p.id) // <-- เพิ่ม filter ตรงนี้
+  ).filter(p => !!p && !!p.id) 
   
 
   {visibleList.map((pokemon) =>
@@ -83,7 +83,7 @@ useEffect(() => {
 
   return (
     <div className="mother-container">
-      {/* ✅ Search Bar */}
+      {/*  Search Bar */}
       <div className="searchbar-container">
         <p className="searchbar-title">Search Pokémon</p>
         <input
@@ -95,7 +95,7 @@ useEffect(() => {
         />
       </div>
 
-      {/* ✅ Pokémon Grid */}
+      {/* Pokémon Grid */}
       <div className="main-wrapper">
       <div className="card-container">
         {visibleList.length > 0 ? (
@@ -108,7 +108,7 @@ useEffect(() => {
       </div>
       </div>
 
-      {/* ✅ Load More */}
+      {/* Load More */}
       {!searchTerm && (
         <div className="load-more-container">
           <button
