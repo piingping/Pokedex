@@ -166,3 +166,39 @@
 .type-fairy {
   background: #439fc6;
 }
+.image-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+
+@media screen and (max-width: 620px) {
+  .card-container {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    padding: 12px;
+    width: 100%;
+    place-items: stretch; 
+  }
+
+  .pokemon-img {
+    width: 140px; /* ✅ ลดขนาดภาพให้เหมาะกับมือถือ */
+    height: 140px;
+    align-self: center;
+    justify-content: center;
+  }
+
+  .pokemon-name {
+    font-size: 20px;
+  }
+
+  .pokemon-id {
+    font-size: 14px;
+  }
+
+  .type-badge {
+    font-size: 0.6rem;
+    padding: 0.2rem 0.5rem;
+  }
+}

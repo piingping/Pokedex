@@ -32,7 +32,7 @@
 }
 
 .pokedex-icon {
-  width: 25%;
+  width: 450px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -46,10 +46,10 @@
 }
 .searchbar-title {
   color: #ffcc01;
-  font-size: large;
+  font-size: 1.5rem;
 }
 .seacrbar {
-  width: 40%;
+  width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -61,6 +61,24 @@
   box-shadow: 0 0 12px rgba(255, 204, 1, 0.6);
   color: #fbfbfb;
 }
+
+.searchbar-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+  width: 60%;
+}
+
+.search-button {
+  background: none;
+  border: none;
+  color: #facc15;
+  font-size: 1.25rem;
+  cursor: pointer;
+  padding: 0.3rem;
+}
+
 
 .pokemon-list {
   background-color: bisque;
@@ -75,8 +93,8 @@
   border: 1px solid #fbfbfb;
   background: #ffcc01;
   box-shadow: 0px -4px 4px 0px rgba(255, 238, 0, 0.4);
-  width: 15%;
-  height: 36px;
+  width: 20%;
+  height: 40px;
   align-self: center;
   margin-top: 25px;
   margin-bottom: 50px;
@@ -95,4 +113,34 @@
 
 .animate-fill-block {
   animation-name: fill-block;
+}
+
+@media screen and (max-width: 840px) {
+  .pokedex-icon{
+    max-width: 320px;
+  }
+  .searchbar-wrapper{
+    width: 90%;
+  }
+  .load-more-btn{
+    width: 90%;
+  }
+  
+}
+
+@media screen and (max-width: 300px) {
+  .searchbar-wrapper {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.25rem;
+  }
+
+  .seacrbar {
+    width: 100%;
+  }
+
+  .search-button {
+    display: none;
+  }
+ 
 }

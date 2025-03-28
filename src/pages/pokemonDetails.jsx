@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
 import TopSection from "../components/topSection";
 import DetailSection from "../components/detailSection";
-import AlternateForms from "../components/alternativeForms";
+import AlternateForms from "../components/alternateForms";
 import EvolutionChart from "../components/evolutionChart";
 import "../components/pokemonDetails.css";
 

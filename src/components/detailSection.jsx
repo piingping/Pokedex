@@ -1,12 +1,18 @@
 import StatBar from "../components/statBar";
-import StatColumnChart from "./StatColumnChart"
+import StatColumnChart from "./StatColumnChain"
 
 export default function DetailSection({ pokemon, species }) {
   const getGenderRatio = (rate) => {
     if (rate === -1) return "Genderless";
     const female = (rate / 8) * 100;
     const male = 100 - female;
-    return `♂ ${male.toFixed(0)}% / ♀ ${female.toFixed(0)}%`;
+    return (
+        <>
+          <span style={{ color: "rgb(128, 204, 245)", fontWeight:"bold" }}>♂ {male.toFixed(0)}%</span> /{" "}
+          <span style={{ color: "#ec4899", fontWeight:"bold" }}>♀ {female.toFixed(0)}%</span>
+        </>
+      );
+      
   };
 
   const getEvYields = (stats) =>

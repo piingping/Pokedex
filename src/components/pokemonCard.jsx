@@ -25,7 +25,9 @@ export default function PokemonCard({ id }) {
   return (
     <div className="pokemon-card">
   <Link to={`/pokemon/${pokemon.name}`} className="pokemon-link">
+  <div className="image-wrapper">
     <img src={pokemon.image} alt={pokemon.name} className="pokemon-img" loading="lazy" />
+    </div>
     <div className='card-details'>
     <p className="pokemon-id">{String(pokemon.id).padStart(4, '0')}</p>
 
