@@ -1,0 +1,127 @@
+.container {
+  padding: 2rem;
+}
+
+.top-container {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  max-width: 1024px;
+  margin: 0 auto;
+}
+
+.pic-container {
+  display: flex;
+  justify-content: center;
+}
+
+.pokemon-image {
+  width: 340px;
+  aspect-ratio: 1/1;
+  object-fit: contain;
+ 
+  border-radius: 12px;
+  padding: 12px;
+}
+
+.pokemon-card-details {
+  flex: 1;
+  background-color: #1e1e1e;
+  padding: 1.5rem;
+  border-radius: 12px;
+  border: 1px solid #facc15;
+  box-shadow: 0 0 8px #facc15;
+}
+
+.pokemon-name-details {
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: #facc15;
+  margin-bottom: 0.5rem;
+}
+
+.pokemon-id {
+  font-size: 1rem;
+  color: #fff;
+  margin-left: 0.5rem;
+}
+
+.label {
+  color: #facc15;
+  font-weight: 600;
+}
+
+.type-badge {
+  display: inline-block;
+  padding: 0.2rem 0.6rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  margin: 0.2rem 0.3rem 0.2rem 0;
+  text-transform: lowercase;
+  color: white;
+}
+
+/* Layout for stats + info */
+.info-grid {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  max-width: 1024px;
+  margin: 2rem auto;
+}
+
+.stat-box,
+.info-box {
+  width: 50%;
+  background-color: #1e1e1e;
+  padding: 1.5rem;
+  border-radius: 16px;
+  border: 2px solid #facc15;
+  box-shadow: 0 0 8px #facc15;
+  /* box-shadow: 0 4px 15px rgba(255, 229, 125, 0.4); */
+  color: white;
+  box-sizing: border-box;
+}
+
+.stat-box h2{
+  margin: 0;
+  color: #facc15;
+}
+
+.stat-box h3,
+.info-box h3 {
+  font-size: 1.5rem;
+  color: #facc15;
+  margin: 0;
+}
+
+
+.info-box li {
+  margin-bottom: 0.5rem;
+  line-height: 1.4;
+  list-style-type:none;
+}
+
+.info-box li strong {
+  color: #facc15;
+}
+
+.alternative-card {
+  width: 180px;
+  background-color: #0f172a;
+  border-radius: 20px;
+  padding: 12px;
+  text-align: center;
+  color: white;
+  border: 1px solid #334155;
+  text-decoration: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: transform 0.2s ease;
+}
+
+.alternative-card:hover {
+  transform: scale(1.05);
+}
