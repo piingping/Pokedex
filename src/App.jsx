@@ -1,6 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Pokedex from "./pages/pokedexList.jsx";
-import PokemonDetail from "./pages/pokemonDetails.jsx";
+import Pokedex from "@/pages/pokedexList.jsx";
+import PokemonDetail from "@/pages/pokemonDetails.jsx";
 
 
 export default function App() {

@@ -183,7 +183,7 @@
   }
 
   .pokemon-img {
-    width: 140px; /* ✅ ลดขนาดภาพให้เหมาะกับมือถือ */
+    width: 140px; 
     height: 140px;
     align-self: center;
     justify-content: center;
