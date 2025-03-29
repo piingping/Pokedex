@@ -23,17 +23,17 @@
   border-radius: 16px;
   border: 1px solid #ffe57d;
   box-shadow: 0 0 12px rgba(255, 229, 125, 0.4);
-
+  width: 95%;
+  height: 100%;
   transition: box-shadow 0.3s ease;
 }
 .card-details {
-  position: relative; /* ❗ต้องใช้สำหรับ ::before */
-
-  padding-left: 1rem; /* หรือค่าที่คุณต้องการ */
-  border-top: 1px solid #e6e6e6; /* ✅ ขอบบน */
+  position: relative; 
+  padding-right: 0.5rem;
+  padding-left: 0.5rem; 
+  border-top: 1px solid #e6e6e6; 
 }
 
-/* ✅ เงานุ่มเฉพาะ border-top */
 .card-details::before {
   content: "";
   position: absolute;
@@ -173,7 +173,7 @@
 }
 
 
-@media screen and (max-width: 620px) {
+@media screen and (max-width: 665px) {
   .card-container {
     grid-template-columns: repeat(2, 1fr);
     gap: 16px;

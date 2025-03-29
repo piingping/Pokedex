@@ -61,10 +61,10 @@
     height: 96px;
     object-fit: contain;
     border-radius: 12px;
-
+    background-color:#1e1e1e;
     padding: 6px;
     border: 1px solid #facc15;
-    /* margin-top: 20px; */
+
   }
   
   .evo-name {
@@ -79,4 +79,11 @@
     font-size: 1.5rem;
     color: #facc15;
   }
-  
+  .no-evolution {
+    text-align: center;
+    color: #FDFAF6;
+    margin-top: 1rem;
+    font-style: italic;
+    font-weight: 500;
+  }
+   
