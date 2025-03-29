@@ -201,7 +201,7 @@
   align-items: flex-end;
   justify-content: space-between;
   height: 400px;
-  gap: 1rem;
+
   padding: 0 1rem;
   margin-top: 1rem;
   width: 90%;
@@ -451,6 +451,7 @@
 }
 
 @media screen and (max-width: 380px) {
+  
   .stat-box {
     display: flex;
     flex-direction: column;
@@ -487,6 +488,13 @@
     margin-right: 0.5rem;
   }
 
+  .navigation-buttons {
+    position: relative;
+    top: 7rem;
+    z-index: 10;
+    padding: 0;
+  }
+
   .nav-button:last-child::before {
     content: ">";
     margin-right: 0;
@@ -517,7 +525,7 @@
     width: 95%;
     max-width: 280px;
     padding: 0;
-    gap: 0.5rem;
+   
   }
 
   .bar-value {
@@ -551,6 +559,7 @@
     height: 200px;
     box-sizing: border-box;
   }
+ 
   
   
 }

@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import PokemonCard from "../components/pokemonCard";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
-import { useLocation } from "react-router-dom";
+import { useSearchParams, useNavigate } from "react-router-dom";
 
 export default function Pokedex() {
   const [allPokemonList, setAllPokemonList] = useState([]);
@@ -15,6 +15,10 @@ export default function Pokedex() {
   const [notFound, setNotFound] = useState(false);
   const [showTypeSelector, setShowTypeSelector] = useState(false);
   const location = useLocation();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
+
   const types = [
     "normal",
     "fire",
@@ -59,15 +63,32 @@ export default function Pokedex() {
   }, [location.pathname]);
 
   useEffect(() => {
+    const query = searchParams.get("query") || "";
+    let typeParams = searchParams.getAll("type");
+
+    if (typeParams.length === 1 && typeParams[0].includes(",")) {
+      // กรณีเกิดจาก type=ice,dark
+      typeParams = typeParams[0].split(",");
+    }
+
+    setInputValue(query);
+    setSearchTerm(query);
+    setSelectedTypes(typeParams.slice(0, 2));
+  }, [searchParams]);
+  useEffect(() => {
     const fetchDetails = async () => {
+      setIsLoading(true);
+
       const newDetails = {};
-      const targetList = searchTerm
-        ? allPokemonList
-        : allPokemonList.slice(0, 150);
+      const targetList =
+        searchTerm || selectedTypes.length > 0
+          ? allPokemonList
+          : allPokemonList.slice(0, 150);
 
       await Promise.all(
         targetList.map(async (p) => {
-          if (!pokemonDetailsCache[p.name]) {
+          const cached = pokemonDetailsCache[p.name];
+          if (!cached || !cached.types || cached.types.length === 0) {
             const res = await fetch(p.url);
             const data = await res.json();
             newDetails[p.name] = {
@@ -82,14 +103,14 @@ export default function Pokedex() {
       );
 
       setPokemonDetailsCache((prev) => ({ ...prev, ...newDetails }));
+      setIsLoading(false);
     };
 
     fetchDetails();
-  }, [allPokemonList, searchTerm]);
+  }, [allPokemonList, searchTerm, selectedTypes]);
 
   const handleSearch = () => {
     const trimmed = inputValue.trim().toLowerCase();
-
     if (/^\d+$/.test(trimmed)) {
       const id = Number(trimmed);
       if (id < 1 || id > 20000) {
@@ -98,110 +119,38 @@ export default function Pokedex() {
       }
     }
 
-    setSearchTerm(trimmed);
+    const params = {};
+    if (trimmed) params.query = trimmed;
+    if (selectedTypes.length) params.type = selectedTypes;
+
+    setSearchParams(params);
+    navigate("/search?" + new URLSearchParams(params).toString());
   };
 
   const handleKeyDown = (e) => {
-    if (e.key === "Enter") {
-      handleSearch();
-    }
+    if (e.key === "Enter") handleSearch();
   };
+
   const filteredList = Object.values(pokemonDetailsCache)
-  .filter((pokemon) => {
-    const trimmed = searchTerm.trim().toLowerCase();
+    .filter((pokemon) => {
+      const trimmed = searchTerm.trim().toLowerCase();
 
-    const matchesText =
-      trimmed === "" ||
-      pokemon.name.toLowerCase().includes(trimmed) ||
-      pokemon.id === Number(trimmed);
+      const matchesText =
+        trimmed === "" ||
+        pokemon.name.toLowerCase().includes(trimmed) ||
+        pokemon.id === Number(trimmed);
 
-    const matchesType =
-      selectedTypes.length === 0 ||
-      selectedTypes.every((type) => pokemon.types?.includes(type));
+      const matchesType =
+        selectedTypes.length === 0 ||
+        (selectedTypes.length === 1
+          ? pokemon.types?.includes(selectedTypes[0])
+          : selectedTypes.every((type) => pokemon.types?.includes(type)));
 
-    return matchesText && matchesType;
-  })
-  .sort((a, b) => a.id - b.id); 
-
-  useEffect(() => {
-    const trimmed = searchTerm.trim().toLowerCase();
-    if (!trimmed) return;
-
-    if (
-      /^\d+$/.test(trimmed) &&
-      (Number(trimmed) < 1 || Number(trimmed) > 1025)
-    ) {
-      setNotFound(true);
-      return;
-    }
-
-    const alreadyLoadedForms = Object.values(pokemonDetailsCache).filter((p) =>
-      p.name.toLowerCase().includes(trimmed)
-    );
-
-    if (alreadyLoadedForms.length >= 2) {
-      setNotFound(false);
-      return;
-    }
-
-    const fetchFallbackPokemon = async () => {
-      try {
-        console.log("[DEBUG] Fetching species data for:", trimmed);
-
-        const speciesRes = await fetch(
-          `https://pokeapi.co/api/v2/pokemon-species/${trimmed}`
-        );
-        if (!speciesRes.ok) {
-          setNotFound(true);
-          return;
-        }
-
-        const speciesData = await speciesRes.json();
-        const altForms = speciesData.varieties
-          .map((v) => ({
-            name: v.pokemon.name,
-            url: v.pokemon.url,
-            id: Number(v.pokemon.url.split("/").filter(Boolean).pop()),
-          }))
-          .filter((p) => p.id <= 1025);
-
-        const fullForms = await Promise.all(
-          altForms.map(async (p) => {
-            const res = await fetch(p.url);
-            const data = await res.json();
-            return {
-              id: data.id,
-              name: data.name,
-              url: p.url,
-              types: data.types.map((t) => t.type.name),
-              image: data.sprites.other["official-artwork"].front_default,
-            };
-          })
-        );
-
-        const cacheMap = {};
-        fullForms.forEach((p) => {
-          cacheMap[p.name] = p;
-        });
-
-        setPokemonDetailsCache((prev) => ({ ...prev, ...cacheMap }));
-        setNotFound(false);
-
-        console.log(
-          "[DEBUG] Added alternate forms:",
-          fullForms.map((f) => f.name)
-        );
-      } catch (err) {
-        console.error("Failed to fetch species data:", err);
-        setNotFound(true);
-      }
-    };
-
-    fetchFallbackPokemon();
-  }, [searchTerm]);
+      return matchesText && matchesType;
+    })
+    .sort((a, b) => a.id - b.id);
 
   const visibleList = filteredList.slice(0, limit);
-
   return (
     <div className="mother-container">
       {/* Search Bar */}
@@ -210,7 +159,7 @@ export default function Pokedex() {
         <div className="searchbar-wrapper">
           <input
             type="text"
-            placeholder="Enter name or Pokémon ID"
+            placeholder="Enter a Pokémon name, ID, or form"
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
             onKeyDown={handleKeyDown}
@@ -220,24 +169,20 @@ export default function Pokedex() {
             <FontAwesomeIcon icon={faMagnifyingGlass} />
           </button>
         </div>
-        <p
-          className="note"
-          style={{ fontSize: "0.75rem", color: "#ccc", textAlign: "center" }}
-        >
-          * Search supports Pokémon names or ID (1–1025) only.
-        </p>
+        <p className="sr-only">Search by name, ID, or alternate forms.</p>
       </div>
 
-      {/* Type Filter */}
+      {/* Type Filter Toggle */}
       <div style={{ marginTop: "1rem", textAlign: "center" }}>
         <button
           onClick={() => setShowTypeSelector(!showTypeSelector)}
           className="toggle-type-button"
         >
-          {showTypeSelector ? "Hide Type Filters" : "Filter by Type"}
+          {showTypeSelector ? "▼ Hide Type Filters" : "► Filter by Type"}
         </button>
       </div>
 
+      {/* Type Filter Buttons */}
       {showTypeSelector && (
         <div className="type-select-container">
           {types.map((type) => {
@@ -247,14 +192,26 @@ export default function Pokedex() {
                 key={type}
                 onClick={() => {
                   setSelectedTypes((prev) => {
-                    if (prev.includes(type))
-                      return prev.filter((t) => t !== type);
-                    if (prev.length < 2) return [...prev, type];
-                    return prev;
+                    let updated = prev.includes(type)
+                      ? prev.filter((t) => t !== type)
+                      : prev.length < 2
+                      ? [...prev, type]
+                      : prev;
+
+                    const params = {};
+                    if (searchTerm) params.query = searchTerm;
+                    if (updated.length) params.type = updated;
+
+                    setSearchParams(params);
+                    navigate(
+                      "/search?" + new URLSearchParams(params).toString()
+                    );
+
+                    return updated;
                   });
                 }}
-                className={`type-button ${isSelected ? `type-${type}` : ""} ${
-                  isSelected ? "active" : ""
+                className={`type-button ${
+                  isSelected ? `type-${type} active` : ""
                 }`}
               >
                 {type}
@@ -264,21 +221,24 @@ export default function Pokedex() {
         </div>
       )}
 
-      {/* Pokémon Grid */}
+      {/* Pokémon Cards */}
       <div className="main-wrapper">
         <div className="card-container">
-          {visibleList.length > 0 ? (
+          {isLoading ? (
+            <p className="text-center text-gray-500">Loading...</p>
+          ) : visibleList.length > 0 ? (
             visibleList.map((pokemon) => (
               <PokemonCard key={pokemon.name} id={pokemon.id} data={pokemon} />
             ))
           ) : (
             <p className="text-center text-gray-400">No results found.</p>
           )}
+
         </div>
       </div>
 
       {/* Load More */}
-      {filteredList.length > visibleList.length && (
+      {!isLoading && filteredList.length > visibleList.length && (
         <div className="load-more-container">
           <button
             className="load-more-btn"

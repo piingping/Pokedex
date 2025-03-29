@@ -82,7 +82,7 @@ export default function PokemonDetail() {
     }
   }, [pokemon])
 
-  if (!pokemon || !species) return <p className="text-white p-4">Loading {name}...</p>
+  if (!pokemon || !species) return <p className="text-white p-4 mar">Loading {name}...</p>
 
   return (
     <div className="container">
