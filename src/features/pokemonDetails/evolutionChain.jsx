@@ -45,10 +45,10 @@ export default function EvolutionChart({ name }) {
           const fallback =
             data.sprites.other?.["official-artwork"]?.front_default ||
             data.sprites.front_default ||
-            "/fallback.jpg"; // <- default fallback
+            "/NoImage.png"; 
           map[name] = fallback;
         } catch (e) {
-          map[name] = "/fallback.png";
+          map[name] = "/NoImage.png";
         }
       }
       setImageMap(map);

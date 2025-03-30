@@ -21,7 +21,7 @@ export default function StatColumnChart({ stats }) {
   };
 
   const maxValue = 250;
-  const maxTotal = 780; // Max possible total stats for balance
+  const maxTotal = 780; 
 
   const totalStat = stats.reduce((sum, s) => sum + s.base_stat, 0);
 
