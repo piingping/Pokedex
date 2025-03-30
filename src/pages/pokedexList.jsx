@@ -4,6 +4,7 @@ import SearchBar from "@/features/pokemonCard/SearchBar";
 import TypeFilter from "@/features/pokemonCard/TypeFilter";
 import PokemonGrid from "@/features/pokemonCard/PokemonGrid";
 import LoadMoreButton from "@/features/pokemonCard/LoadMoreButton";
+import ScrollToTopButton from "@/components/ScrollToTopButton";
 
 export default function Pokedex() {
   const [allPokemonList, setAllPokemonList] = useState([]);
@@ -159,6 +160,7 @@ export default function Pokedex() {
         visibleList={visibleList}
         onLoadMore={() => setLimit(limit + 20)}
       />
+       <ScrollToTopButton />
     </div>
   );
 }

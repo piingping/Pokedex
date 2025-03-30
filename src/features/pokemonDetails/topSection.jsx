@@ -2,10 +2,12 @@ import { useEffect, useState } from "react"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faMicrophone, faMicrophoneSlash } from "@fortawesome/free-solid-svg-icons"
 
+
 export default function TopSection({ pokemon, weaknesses }) {
   const [isPlaying, setIsPlaying] = useState(false)
   const [hasCry, setHasCry] = useState(true)
   const [cryFailed, setCryFailed] = useState(false)
+  
 
   const image = pokemon.sprites.other["official-artwork"].front_default
   const abilities = pokemon.abilities.map((a) => a.ability.name).join(", ")
@@ -27,6 +29,15 @@ export default function TopSection({ pokemon, weaknesses }) {
         setHasCry(false)
       })
   }
+  const [imgSrc, setImgSrc] = useState(image);
+
+  useEffect(() => {
+    if (image) {
+      setImgSrc(image);
+    } else {
+      setImgSrc("/NoImage.png");
+    }
+  }, [image]);
 
   useEffect(() => {
     setCryFailed(false)
@@ -40,13 +51,22 @@ export default function TopSection({ pokemon, weaknesses }) {
   <div className="circle-wrapper">
     <img src="/10922160.png" className="circle-bg" alt="bg" />
     <img
-      src={image}
+      src={imgSrc}
       alt={pokemon.name}
       className="pokemon-image"
+
       onClick={hasCry ? playCry : null}
       style={{ cursor: hasCry ? "pointer" : "default" }}
       title={hasCry ? "Click to hear Pokémon cry" : "Cry not available" }
+
+      
+      onError={() => {
+        console.warn("Fallback image triggered");
+        setImgSrc("/NoImage.png");
+      }}
     />
+
+
   </div>
 </div>
 

@@ -42,7 +42,7 @@
   transform: translate(-50%, -50%);
   animation: spin 100s linear infinite;
   z-index: 1;
-  opacity: 0.5;
+  opacity: 0.8;
 }
 
 
@@ -525,7 +525,7 @@
   .nav-button::before {
     content: "<";
     font-size: 1.5rem;
-    color: #facc15;
+    color: #fffcef;
     margin-right: 0.5rem;
   }
 
